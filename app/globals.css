@@ -1,26 +1,171 @@
 @import "tailwindcss";
 
+@theme {
+  --color-navy: #1C2B3A;
+  --color-navy-dark: #111e29;
+  --color-navy-light: #243547;
+  --color-brand-red: #E8221A;
+  --color-brand-red-dark: #c91d14;
+  --color-brand-blue: #1A3FA8;
+  --color-light: #F8F7F5;
+  --color-light-dark: #EDECEA;
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --rainbow: linear-gradient(90deg, #E8221A 0%, #FF6B00 20%, #FFD700 40%, #00A651 60%, #1A3FA8 80%, #7B2D8B 100%);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  overflow-x: hidden;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body, system-ui, sans-serif);
+  background: #F8F7F5;
+  color: #1C2B3A;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Rainbow utilities */
+.rainbow-text {
+  background: var(--rainbow);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glistening animated rainbow — for "Infinite Smiles." */
+@keyframes rainbow-shimmer {
+  0%   { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+.rainbow-shimmer {
+  background: linear-gradient(
+    90deg,
+    #E8221A 0%,
+    #FF6B00 12%,
+    #FFD700 25%,
+    #00A651 38%,
+    #1A3FA8 50%,
+    #7B2D8B 62%,
+    #FFD700 75%,
+    #FF6B00 88%,
+    #E8221A 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: rainbow-shimmer 4s linear infinite;
+}
+
+/* Bounce keyframe for scroll cue */
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(6px); }
+}
+
+.rainbow-bar {
+  height: 4px;
+  background: var(--rainbow);
+  width: 100%;
+}
+
+/* Smooth underline on hover */
+.hover-underline {
+  position: relative;
+}
+.hover-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.3s ease;
+}
+.hover-underline:hover::after {
+  width: 100%;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #111e29;
+}
+::-webkit-scrollbar-thumb {
+  background: #E8221A;
+  border-radius: 3px;
+}
+
+/* Selection */
+::selection {
+  background: #E8221A;
+  color: white;
+}
+
+/* Focus styles */
+:focus-visible {
+  outline: 2px solid #E8221A;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Before/After slider */
+.ba-slider-handle {
+  cursor: col-resize;
+}
+
+/* Paint stroke animation */
+@keyframes draw-stroke {
+  from {
+    stroke-dashoffset: 800;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+.draw-stroke {
+  stroke-dasharray: 800;
+  stroke-dashoffset: 800;
+}
+
+.draw-stroke.animated {
+  animation: draw-stroke 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Number counter */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fadeUp 0.6s ease forwards;
 }
