@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import SparkleField from "@/components/SparkleField";
 
 gsap.registerPlugin(useGSAP);
 
@@ -79,6 +80,9 @@ export default function Hero() {
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
       style={{ background: "#1C2B3A" }}
     >
+      {/* Sparkles */}
+      <SparkleField count={32} />
+
       {/* Dot grid */}
       <div
         className="absolute inset-0 opacity-[0.04] pointer-events-none"
