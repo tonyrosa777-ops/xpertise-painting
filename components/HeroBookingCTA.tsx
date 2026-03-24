@@ -14,7 +14,7 @@ export default function HeroBookingCTA({ onClick }: { onClick: () => void }) {
     const btn = btnRef.current;
     if (!wrap || !btn) return;
 
-    // Disable magnetic on touch devices — no mouse to track
+    // Disable magnetic on touch devices
     if (window.matchMedia("(pointer: coarse)").matches) return;
 
     const xTo = gsap.quickTo(btn, "x", { duration: 0.5, ease: "power3.out" });
@@ -69,97 +69,68 @@ export default function HeroBookingCTA({ onClick }: { onClick: () => void }) {
   }, [onClick]);
 
   return (
-    /* Wrapper gives room for rings to expand without clipping */
     <div
       ref={wrapRef}
-      className="relative inline-flex items-center justify-center p-7 sm:p-10"
+      className="relative inline-flex items-center justify-center p-5"
     >
-      {/* Hover glow bloom — desktop only */}
+      {/* Hover glow bloom */}
       <div
         ref={glowRef}
-        className="absolute inset-6 sm:inset-8 rounded-2xl pointer-events-none"
+        className="absolute inset-0 rounded-2xl pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse at center, rgba(232,34,26,0.45) 0%, transparent 70%)",
-          filter: "blur(18px)",
+          background: "radial-gradient(ellipse at center, rgba(232,34,26,0.5) 0%, transparent 70%)",
+          filter: "blur(20px)",
           opacity: 0,
         }}
       />
 
-      {/* Rings positioned relative to the button */}
-      <div className="relative inline-block">
+      <button
+        ref={btnRef}
+        onClick={onClick}
+        className="relative overflow-hidden cursor-pointer select-none text-white font-black rounded-2xl"
+        style={{
+          padding: "clamp(14px, 2.5vw, 22px) clamp(28px, 5vw, 56px)",
+          fontSize: "clamp(0.95rem, 2.5vw, 1.18rem)",
+          fontFamily: "var(--font-display)",
+          letterSpacing: "0.015em",
+          background: "linear-gradient(135deg, #f2261d 0%, #E8221A 45%, #cc1c10 100%)",
+          boxShadow:
+            "inset 0 1px 0 rgba(255,255,255,0.18), 0 8px 32px rgba(232,34,26,0.5), 0 2px 8px rgba(0,0,0,0.35)",
+          willChange: "transform",
+          border: "none",
+          animation: "cta-breathe 3s ease-in-out infinite",
+        }}
+        aria-label="Book your free consultation with Alysha"
+      >
+        {/* Shimmer sweep */}
         <div
-          className="absolute pointer-events-none rounded-2xl"
+          className="absolute inset-0 pointer-events-none"
           style={{
-            inset: "-2px",
-            border: "1.5px solid rgba(232,34,26,0.55)",
-            animation: "cta-ring 2.6s ease-out infinite",
-          }}
-        />
-        <div
-          className="absolute pointer-events-none rounded-2xl"
-          style={{
-            inset: "-2px",
-            border: "1.5px solid rgba(232,34,26,0.3)",
-            animation: "cta-ring 2.6s ease-out 0.87s infinite",
-          }}
-        />
-        <div
-          className="absolute pointer-events-none rounded-2xl"
-          style={{
-            inset: "-2px",
-            border: "1.5px solid rgba(232,34,26,0.12)",
-            animation: "cta-ring 2.6s ease-out 1.74s infinite",
+            background:
+              "linear-gradient(108deg, transparent 30%, rgba(255,255,255,0.22) 50%, transparent 70%)",
+            backgroundSize: "250% 100%",
+            animation: "cta-shimmer 3s ease-in-out infinite",
           }}
         />
 
-        {/* THE BUTTON */}
-        <button
-          ref={btnRef}
-          onClick={onClick}
-          className="relative overflow-hidden cursor-pointer select-none text-white font-black rounded-2xl"
-          style={{
-            padding: "clamp(14px, 2.5vw, 22px) clamp(28px, 5vw, 56px)",
-            fontSize: "clamp(0.95rem, 2.5vw, 1.18rem)",
-            fontFamily: "var(--font-display)",
-            letterSpacing: "0.015em",
-            background: "linear-gradient(135deg, #f2261d 0%, #E8221A 45%, #cc1c10 100%)",
-            boxShadow:
-              "inset 0 1px 0 rgba(255,255,255,0.18), 0 8px 32px rgba(232,34,26,0.5), 0 2px 8px rgba(0,0,0,0.35)",
-            willChange: "transform",
-            border: "none",
-          }}
-          aria-label="Book your free consultation with Alysha"
-        >
-          {/* Shimmer sweep */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background:
-                "linear-gradient(108deg, transparent 30%, rgba(255,255,255,0.22) 50%, transparent 70%)",
-              backgroundSize: "250% 100%",
-              animation: "cta-shimmer 3s ease-in-out infinite",
-            }}
-          />
-
-          <span className="relative z-10 flex items-center gap-3 whitespace-nowrap">
-            <span>Book Your Free Consultation</span>
-            <svg
-              ref={arrowRef}
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              style={{ flexShrink: 0 }}
-            >
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </span>
-        </button>
-      </div>
+        <span className="relative z-10 flex items-center gap-3 whitespace-nowrap">
+          <span>Book Your Free Consultation</span>
+          <svg
+            ref={arrowRef}
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            style={{ flexShrink: 0 }}
+          >
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </span>
+      </button>
     </div>
   );
 }

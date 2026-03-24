@@ -201,16 +201,13 @@ export default function Hero() {
         {/* THE CTA — one dominant action */}
         <div ref={ctaRef} className="flex flex-col items-center mb-8">
           <HeroBookingCTA onClick={scrollToContact} />
-          {/* Friction-reducing sub-text */}
-          <p className="text-white/35 text-sm -mt-2">
-            Free &middot; No obligation &middot;{" "}
-            <a
-              href="tel:6035340115"
-              className="text-white/50 hover:text-white/75 transition-colors underline underline-offset-2"
-            >
-              (603) 534-0115
-            </a>
-          </p>
+          {/* Phone link */}
+          <a
+            href="tel:6035340115"
+            className="text-white/35 hover:text-white/55 text-sm -mt-2 transition-colors"
+          >
+            (603) 534-0115
+          </a>
         </div>
 
         {/* Trust micro-bar */}

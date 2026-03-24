@@ -137,6 +137,12 @@ const platformColors: Record<string, string> = {
   Facebook: "#1877F2",
 };
 
+const platformReviewLinks: Record<string, string> = {
+  Google: "https://www.google.com/maps/search/Xpertise+Painting+LLC+Nashua+NH",
+  Yelp: "https://www.yelp.com/search?find_desc=Xpertise+Painting+LLC&find_loc=Nashua%2C+NH",
+  Facebook: "https://www.facebook.com/p/Xpertise-Painting-LLC-61574930433297/reviews/",
+};
+
 const platformBg: Record<string, string> = {
   Google: "#4285F420",
   Yelp: "#D3232320",
@@ -275,38 +281,44 @@ export default function TestimonialsPage() {
           </div>
 
           {/* Filters */}
-          <div className="flex flex-col sm:flex-row gap-3 mb-10">
-            <div className="flex gap-2 flex-wrap">
-              {PLATFORMS.map((p) => (
-                <button
-                  key={p}
-                  onClick={() => setPlatform(p)}
-                  className="px-4 py-1.5 rounded-full text-sm font-medium transition-all"
-                  style={{
-                    background: platform === p
-                      ? (p === "All" ? "#1C2B3A" : platformColors[p])
-                      : "#EDECEA",
-                    color: platform === p ? "#fff" : "#1C2B3A99",
-                  }}
-                >
-                  {p}
-                </button>
-              ))}
+          <div className="flex flex-col gap-3 mb-10">
+            <div className="flex items-center gap-3 flex-wrap">
+              <span className="text-navy/40 text-xs font-semibold tracking-widest uppercase w-16 flex-shrink-0">Platform</span>
+              <div className="flex gap-2 flex-wrap">
+                {PLATFORMS.map((p) => (
+                  <button
+                    key={p}
+                    onClick={() => setPlatform(p)}
+                    className="px-4 py-1.5 rounded-full text-sm font-medium transition-all"
+                    style={{
+                      background: platform === p
+                        ? (p === "All" ? "#1C2B3A" : platformColors[p])
+                        : "#EDECEA",
+                      color: platform === p ? "#fff" : "#1C2B3A99",
+                    }}
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="flex gap-2 flex-wrap">
-              {SERVICES.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setService(s)}
-                  className="px-4 py-1.5 rounded-full text-sm font-medium transition-all"
-                  style={{
-                    background: service === s ? "#1C2B3A" : "#EDECEA",
-                    color: service === s ? "#fff" : "#1C2B3A99",
-                  }}
-                >
-                  {s}
-                </button>
-              ))}
+            <div className="flex items-center gap-3 flex-wrap">
+              <span className="text-navy/40 text-xs font-semibold tracking-widest uppercase w-16 flex-shrink-0">Service</span>
+              <div className="flex gap-2 flex-wrap">
+                {SERVICES.map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setService(s)}
+                    className="px-4 py-1.5 rounded-full text-sm font-medium transition-all"
+                    style={{
+                      background: service === s ? "#1C2B3A" : "#EDECEA",
+                      color: service === s ? "#fff" : "#1C2B3A99",
+                    }}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -376,7 +388,9 @@ export default function TestimonialsPage() {
                 {Object.entries(platformColors).map(([p, color]) => (
                   <a
                     key={p}
-                    href="#"
+                    href={platformReviewLinks[p]}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="px-4 py-2.5 rounded-lg text-white text-sm font-bold transition-all hover:scale-105"
                     style={{ background: color, boxShadow: `0 4px 14px ${color}40` }}
                   >

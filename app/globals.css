@@ -154,10 +154,10 @@ body {
   animation: draw-stroke 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-/* Hero CTA — pulsing rings */
-@keyframes cta-ring {
-  0%   { transform: scale(1);    opacity: 1; }
-  100% { transform: scale(1.55); opacity: 0; }
+/* Hero CTA — breathing glow */
+@keyframes cta-breathe {
+  0%, 100% { box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 8px 32px rgba(232,34,26,0.45), 0 2px 8px rgba(0,0,0,0.35); }
+  50%       { box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 8px 52px rgba(232,34,26,0.75), 0 2px 8px rgba(0,0,0,0.35); }
 }
 
 /* Hero CTA — shimmer sweep */
@@ -181,4 +181,9 @@ body {
 
 .fade-up {
   animation: fadeUp 0.6s ease forwards;
+}
+
+/* Hide Snipcart cart badge when empty */
+.snipcart-items-count:empty {
+  display: none !important;
 }
