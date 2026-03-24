@@ -21,6 +21,7 @@ const footerLinks = {
     "About Alysha",
     "Our Process",
     "For Contractors",
+    "Reviews",
     "Free Estimate",
   ],
 };
@@ -144,23 +145,32 @@ export default function Footer() {
               <ul className="space-y-3">
                 {links.map((link) => (
                   <li key={link}>
-                    <button
-                      onClick={() => {
-                        const map: Record<string, string> = {
-                          "About Alysha": "#about",
-                          "Our Process": "#process",
-                          "For Contractors": "#contractors",
-                          "Free Estimate": "#contact",
-                        };
-                        const href = map[link] || "#contact";
-                        document
-                          .querySelector(href)
-                          ?.scrollIntoView({ behavior: "smooth" });
-                      }}
-                      className="text-white/45 hover:text-white/80 text-sm transition-colors text-left"
-                    >
-                      {link}
-                    </button>
+                    {link === "Reviews" ? (
+                      <a
+                        href="/testimonials"
+                        className="text-white/45 hover:text-white/80 text-sm transition-colors"
+                      >
+                        {link}
+                      </a>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          const map: Record<string, string> = {
+                            "About Alysha": "#about",
+                            "Our Process": "#process",
+                            "For Contractors": "#contractors",
+                            "Free Estimate": "#contact",
+                          };
+                          const href = map[link] || "#contact";
+                          document
+                            .querySelector(href)
+                            ?.scrollIntoView({ behavior: "smooth" });
+                        }}
+                        className="text-white/45 hover:text-white/80 text-sm transition-colors text-left"
+                      >
+                        {link}
+                      </button>
+                    )}
                   </li>
                 ))}
               </ul>
