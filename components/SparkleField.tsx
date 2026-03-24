@@ -33,8 +33,8 @@ function generateSparkles(count: number): Sparkle[] {
     y: Math.random() * 92 + 2,
     size: Math.random() * 16 + 5, // 5–21px — more small ones for density
     color: COLORS[Math.floor(Math.random() * COLORS.length)],
-    delay: Math.random() * 5,            // tighter stagger window
-    duration: Math.random() * 1.2 + 1.2, // 1.2–2.4s per cycle (faster)
+    delay: Math.random() * 6,
+    duration: Math.random() * 1.5 + 1.8, // 1.8–3.3s per cycle (original)
     initialRotation: Math.random() * 60 - 30,
   }));
 }
@@ -90,9 +90,9 @@ export default function SparkleField({ count = 32 }: { count?: number }) {
             duration: sp.duration * 0.25,
             ease: "power2.in",
           })
-          // Short rest before repeating
+          // Dark pause so they don't all blink in sync
           .to(el, {
-            duration: sp.duration * (0.3 + Math.random() * 0.5),
+            duration: sp.duration * (0.8 + Math.random() * 1.2),
             opacity: 0,
           });
       });
