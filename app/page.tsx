@@ -2,6 +2,7 @@ import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import TrustBar from "@/components/TrustBar";
 import Services from "@/components/Services";
+import Gallery from "@/components/Gallery";
 import BeforeAfter from "@/components/BeforeAfter";
 import Process from "@/components/Process";
 import About from "@/components/About";
@@ -21,6 +22,7 @@ export default function Home() {
         <Hero />
         <TrustBar />
         <Services />
+        <Gallery />
         <BeforeAfter />
         <Process />
         <About />

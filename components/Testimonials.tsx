@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
+import Link from "next/link";
 
 const testimonials = [
   {
@@ -263,6 +264,25 @@ export default function Testimonials() {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* See all CTA */}
+        <div
+          className="text-center mt-10"
+          style={{
+            opacity: visible ? 1 : 0,
+            transition: "opacity 0.5s ease 0.6s",
+          }}
+        >
+          <Link
+            href="/testimonials"
+            className="inline-flex items-center gap-2.5 border border-white/20 hover:border-white/40 text-white/70 hover:text-white font-semibold px-7 py-3 rounded-xl transition-all duration-200 hover:bg-white/5"
+          >
+            Read All 12+ Reviews
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </Link>
         </div>
       </div>
     </section>
