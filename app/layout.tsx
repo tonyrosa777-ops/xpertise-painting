@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, DM_Sans } from "next/font/google";
 import Script from "next/script";
+import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -50,7 +51,7 @@ export default function RootLayout({
         />
       </head>
       <body>
-        {children}
+        <SmoothScroll>{children}</SmoothScroll>
         {/* Snipcart config — hidden div in body */}
         <div
           id="snipcart"

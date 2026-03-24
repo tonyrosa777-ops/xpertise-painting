@@ -12,11 +12,10 @@ import Contractors from "@/components/Contractors";
 import EstimateForm from "@/components/EstimateForm";
 import Footer from "@/components/Footer";
 import MobileStickyCTA from "@/components/MobileStickyCTA";
-import SmoothScroll from "@/components/SmoothScroll";
 
 export default function Home() {
   return (
-    <SmoothScroll>
+    <>
       <Navigation />
       <main className="pb-16 lg:pb-0">
         <Hero />
@@ -33,6 +32,6 @@ export default function Home() {
       </main>
       <Footer />
       <MobileStickyCTA />
-    </SmoothScroll>
+    </>
   );
 }
