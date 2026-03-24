@@ -154,6 +154,19 @@ body {
   animation: draw-stroke 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
+/* Hero CTA — pulsing rings */
+@keyframes cta-ring {
+  0%   { transform: scale(1);    opacity: 1; }
+  100% { transform: scale(1.55); opacity: 0; }
+}
+
+/* Hero CTA — shimmer sweep */
+@keyframes cta-shimmer {
+  0%   { background-position: 200% center; }
+  60%  { background-position: -100% center; }
+  100% { background-position: -100% center; }
+}
+
 /* Number counter */
 @keyframes fadeUp {
   from {
