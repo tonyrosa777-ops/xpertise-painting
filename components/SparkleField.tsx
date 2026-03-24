@@ -26,17 +26,31 @@ type Sparkle = {
   initialRotation: number;
 };
 
+// Text block lives roughly at x: 20–80%, y: 28–72% — keep sparkles outside it
+function isInTextZone(x: number, y: number) {
+  return x > 20 && x < 80 && y > 28 && y < 72;
+}
+
 function generateSparkles(count: number): Sparkle[] {
-  return Array.from({ length: count }, (_, i) => ({
-    id: i,
-    x: Math.random() * 96 + 2,
-    y: Math.random() * 92 + 2,
-    size: Math.random() * 16 + 5, // 5–21px — more small ones for density
-    color: COLORS[Math.floor(Math.random() * COLORS.length)],
-    delay: Math.random() * 6,
-    duration: Math.random() * 1.5 + 1.8, // 1.8–3.3s per cycle (original)
-    initialRotation: Math.random() * 60 - 30,
-  }));
+  const sparkles: Sparkle[] = [];
+  let attempts = 0;
+  while (sparkles.length < count && attempts < count * 10) {
+    attempts++;
+    const x = Math.random() * 96 + 2;
+    const y = Math.random() * 92 + 2;
+    if (isInTextZone(x, y)) continue;
+    sparkles.push({
+      id: sparkles.length,
+      x,
+      y,
+      size: Math.random() * 16 + 5,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      delay: Math.random() * 5,
+      duration: Math.random() * 1.2 + 1.2, // fast timing
+      initialRotation: Math.random() * 60 - 30,
+    });
+  }
+  return sparkles;
 }
 
 export default function SparkleField({ count = 32 }: { count?: number }) {
@@ -90,9 +104,9 @@ export default function SparkleField({ count = 32 }: { count?: number }) {
             duration: sp.duration * 0.25,
             ease: "power2.in",
           })
-          // Dark pause so they don't all blink in sync
+          // Short rest before repeating
           .to(el, {
-            duration: sp.duration * (0.8 + Math.random() * 1.2),
+            duration: sp.duration * (0.3 + Math.random() * 0.5),
             opacity: 0,
           });
       });
