@@ -81,7 +81,7 @@ export default function Hero() {
       style={{ background: "#1C2B3A" }}
     >
       {/* Sparkles */}
-      <SparkleField count={32} />
+      <SparkleField count={80} />
 
       {/* Dot grid */}
       <div
