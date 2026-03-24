@@ -21,19 +21,30 @@ const images = [
   { src: "/images/work-15.jpeg", alt: "Completed project" },
 ];
 
+const PER_PAGE = 6;
+const TOTAL_PAGES = Math.ceil(images.length / PER_PAGE);
+
 export default function Gallery() {
   const [lightbox, setLightbox] = useState<number | null>(null);
-  const [loaded, setLoaded] = useState(false);
+  const [page, setPage] = useState(0);
+  const [animKey, setAnimKey] = useState(0);
 
-  useEffect(() => {
-    setLoaded(true);
-  }, []);
+  const pageImages = images.slice(page * PER_PAGE, (page + 1) * PER_PAGE);
 
-  const prev = useCallback(() => {
+  // Split current page into 3 columns
+  const cols: typeof images[] = [[], [], []];
+  pageImages.forEach((img, i) => cols[i % 3].push(img));
+
+  const goToPage = (p: number) => {
+    setPage(p);
+    setAnimKey((k) => k + 1);
+  };
+
+  // Lightbox nav cycles through ALL images, not just current page
+  const prevLight = useCallback(() => {
     setLightbox((i) => (i === null ? null : (i - 1 + images.length) % images.length));
   }, []);
-
-  const next = useCallback(() => {
+  const nextLight = useCallback(() => {
     setLightbox((i) => (i === null ? null : (i + 1) % images.length));
   }, []);
 
@@ -41,8 +52,8 @@ export default function Gallery() {
     if (lightbox === null) return;
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") setLightbox(null);
-      if (e.key === "ArrowLeft") prev();
-      if (e.key === "ArrowRight") next();
+      if (e.key === "ArrowLeft") prevLight();
+      if (e.key === "ArrowRight") nextLight();
     };
     window.addEventListener("keydown", handler);
     document.body.style.overflow = "hidden";
@@ -50,25 +61,14 @@ export default function Gallery() {
       window.removeEventListener("keydown", handler);
       document.body.style.overflow = "";
     };
-  }, [lightbox, prev, next]);
-
-  // Split into 3 columns for masonry
-  const cols: typeof images[] = [[], [], []];
-  images.forEach((img, i) => cols[i % 3].push(img));
+  }, [lightbox, prevLight, nextLight]);
 
   return (
     <section id="gallery" className="bg-navy-dark py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
 
         {/* Header */}
-        <div
-          className="text-center mb-14"
-          style={{
-            opacity: loaded ? 1 : 0,
-            transform: loaded ? "translateY(0)" : "translateY(20px)",
-            transition: "opacity 0.6s ease, transform 0.6s ease",
-          }}
-        >
+        <div className="text-center mb-14">
           <span className="text-brand-red font-semibold text-sm tracking-[0.15em] uppercase block mb-3">
             Our Work
           </span>
@@ -83,20 +83,19 @@ export default function Gallery() {
           </p>
         </div>
 
-        {/* Masonry grid — 3 columns desktop, 2 tablet, 1 mobile */}
-        <div className="hidden lg:flex gap-4">
+        {/* Grid — 3 cols desktop */}
+        <div key={animKey} className="hidden lg:flex gap-4 min-h-[480px]">
           {cols.map((col, ci) => (
             <div key={ci} className="flex-1 flex flex-col gap-4">
               {col.map((img, ii) => {
-                const globalIdx = ci + ii * 3;
+                const globalIdx = page * PER_PAGE + ci + ii * 3;
                 return (
                   <GalleryTile
                     key={img.src}
                     img={img}
                     index={globalIdx}
                     onOpen={setLightbox}
-                    loaded={loaded}
-                    delay={globalIdx * 0.05}
+                    delay={ii * 0.07 + ci * 0.04}
                   />
                 );
               })}
@@ -104,42 +103,79 @@ export default function Gallery() {
           ))}
         </div>
 
-        {/* 2-column layout for tablet */}
-        <div className="hidden sm:grid lg:hidden grid-cols-2 gap-4">
-          {images.map((img, i) => (
+        {/* 2-col tablet */}
+        <div key={`tab-${animKey}`} className="hidden sm:grid lg:hidden grid-cols-2 gap-4">
+          {pageImages.map((img, i) => (
             <GalleryTile
               key={img.src}
               img={img}
-              index={i}
+              index={page * PER_PAGE + i}
               onOpen={setLightbox}
-              loaded={loaded}
-              delay={i * 0.04}
+              delay={i * 0.06}
             />
           ))}
         </div>
 
-        {/* Single column mobile */}
-        <div className="grid sm:hidden grid-cols-1 gap-4">
-          {images.map((img, i) => (
+        {/* 1-col mobile */}
+        <div key={`mob-${animKey}`} className="grid sm:hidden grid-cols-1 gap-4">
+          {pageImages.map((img, i) => (
             <GalleryTile
               key={img.src}
               img={img}
-              index={i}
+              index={page * PER_PAGE + i}
               onOpen={setLightbox}
-              loaded={loaded}
-              delay={i * 0.04}
+              delay={i * 0.06}
             />
           ))}
         </div>
 
-        {/* CTA strip */}
-        <div
-          className="text-center mt-14"
-          style={{
-            opacity: loaded ? 1 : 0,
-            transition: "opacity 0.6s ease 0.5s",
-          }}
-        >
+        {/* Pagination */}
+        <div className="flex items-center justify-center gap-4 mt-10">
+          <button
+            onClick={() => goToPage(page - 1)}
+            disabled={page === 0}
+            className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/50 hover:text-white hover:border-white/40 disabled:opacity-25 disabled:cursor-not-allowed transition-all"
+            aria-label="Previous page"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+
+          <div className="flex items-center gap-2">
+            {Array.from({ length: TOTAL_PAGES }).map((_, i) => (
+              <button
+                key={i}
+                onClick={() => goToPage(i)}
+                className="rounded-full transition-all duration-300"
+                style={{
+                  width: i === page ? "28px" : "8px",
+                  height: "8px",
+                  background: i === page ? "#E8221A" : "rgba(255,255,255,0.2)",
+                }}
+                aria-label={`Page ${i + 1}`}
+              />
+            ))}
+          </div>
+
+          <button
+            onClick={() => goToPage(page + 1)}
+            disabled={page === TOTAL_PAGES - 1}
+            className="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/50 hover:text-white hover:border-white/40 disabled:opacity-25 disabled:cursor-not-allowed transition-all"
+            aria-label="Next page"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
+        </div>
+
+        <p className="text-center text-white/25 text-xs mt-3">
+          {page * PER_PAGE + 1}–{Math.min((page + 1) * PER_PAGE, images.length)} of {images.length} photos
+        </p>
+
+        {/* CTA */}
+        <div className="text-center mt-12">
           <p className="text-white/35 text-sm mb-5">
             Like what you see? Let&apos;s make your home the next one.
           </p>
@@ -163,12 +199,9 @@ export default function Gallery() {
           style={{ background: "rgba(0,0,0,0.93)" }}
           onClick={() => setLightbox(null)}
         >
-          {/* Counter */}
           <div className="absolute top-5 left-1/2 -translate-x-1/2 text-white/40 text-sm font-medium z-10">
             {lightbox + 1} / {images.length}
           </div>
-
-          {/* Close */}
           <button
             className="absolute top-4 right-5 text-white/50 hover:text-white transition-colors z-10 p-2"
             onClick={() => setLightbox(null)}
@@ -178,21 +211,17 @@ export default function Gallery() {
               <path d="M18 6L6 18M6 6l12 12" />
             </svg>
           </button>
-
-          {/* Prev */}
           <button
             className="absolute left-3 lg:left-8 text-white/50 hover:text-white transition-colors z-10 p-3 rounded-xl hover:bg-white/10"
-            onClick={(e) => { e.stopPropagation(); prev(); }}
+            onClick={(e) => { e.stopPropagation(); prevLight(); }}
             aria-label="Previous image"
           >
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M15 18l-6-6 6-6" />
             </svg>
           </button>
-
-          {/* Image */}
           <div
-            className="relative max-w-5xl max-h-[85vh] mx-16 lg:mx-24"
+            className="relative mx-16 lg:mx-24"
             onClick={(e) => e.stopPropagation()}
           >
             <Image
@@ -206,11 +235,9 @@ export default function Gallery() {
             />
             <p className="text-white/40 text-xs text-center mt-3">{images[lightbox].alt}</p>
           </div>
-
-          {/* Next */}
           <button
             className="absolute right-3 lg:right-8 text-white/50 hover:text-white transition-colors z-10 p-3 rounded-xl hover:bg-white/10"
-            onClick={(e) => { e.stopPropagation(); next(); }}
+            onClick={(e) => { e.stopPropagation(); nextLight(); }}
             aria-label="Next image"
           >
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -227,22 +254,27 @@ function GalleryTile({
   img,
   index,
   onOpen,
-  loaded,
   delay,
 }: {
   img: { src: string; alt: string };
   index: number;
   onOpen: (i: number) => void;
-  loaded: boolean;
   delay: number;
 }) {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(true), delay * 1000);
+    return () => clearTimeout(t);
+  }, [delay]);
+
   return (
     <div
       className="group relative overflow-hidden rounded-xl cursor-pointer"
       style={{
-        opacity: loaded ? 1 : 0,
-        transform: loaded ? "translateY(0)" : "translateY(24px)",
-        transition: `opacity 0.5s ease ${delay}s, transform 0.5s ease ${delay}s`,
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(20px)",
+        transition: "opacity 0.45s ease, transform 0.45s ease",
       }}
       onClick={() => onOpen(index)}
     >
@@ -252,14 +284,10 @@ function GalleryTile({
         width={600}
         height={450}
         className="w-full h-auto block transition-transform duration-500 group-hover:scale-105"
-        style={{ display: "block" }}
       />
-      {/* Hover overlay */}
       <div className="absolute inset-0 bg-navy/0 group-hover:bg-navy/50 transition-all duration-300 flex items-center justify-center">
-        <div
-          className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-12 h-12 rounded-full bg-white/15 backdrop-blur-sm border border-white/30 flex items-center justify-center"
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-11 h-11 rounded-full bg-white/15 backdrop-blur-sm border border-white/30 flex items-center justify-center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
             <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
             <path d="M11 8v6M8 11h6" />
           </svg>
