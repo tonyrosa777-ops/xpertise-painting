@@ -1,12 +1,25 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Footer from "@/components/Footer";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+gsap.registerPlugin(useGSAP);
+
+// Shared IntersectionObserver hook — matches pattern used across this site
+function useReveal(threshold = 0.1) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [threshold]);
+  return { ref, visible };
+}
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 
@@ -161,9 +174,8 @@ function ROICalculator() {
   const [jobValue, setJobValue] = useState(2400);
   const [clientsPerMonth, setClientsPerMonth] = useState(4);
   const [selectedTier, setSelectedTier] = useState(1);
-  const sectionRef = useRef<HTMLElement>(null);
-  const headRef = useRef<HTMLDivElement>(null);
-  const cardRef = useRef<HTMLDivElement>(null);
+  const { ref: headRef, visible: headVisible } = useReveal(0.15);
+  const { ref: cardRef, visible: cardVisible } = useReveal(0.1);
 
   const packagePrice = tiers[selectedTier].price;
   const monthlyRevenue = jobValue * clientsPerMonth;
@@ -174,21 +186,11 @@ function ROICalculator() {
   const sliderBg = (val: number, min: number, max: number) =>
     `linear-gradient(to right, #E8221A ${((val - min) / (max - min)) * 100}%, rgba(255,255,255,0.1) ${((val - min) / (max - min)) * 100}%)`;
 
-  useGSAP(() => {
-    gsap.from(headRef.current, {
-      y: 30, opacity: 0, duration: 0.7, ease: "power2.out",
-      scrollTrigger: { trigger: headRef.current, start: "top 85%" },
-    });
-    gsap.from(cardRef.current, {
-      y: 40, opacity: 0, duration: 0.8, ease: "power2.out", delay: 0.1,
-      scrollTrigger: { trigger: cardRef.current, start: "top 85%" },
-    });
-  }, { scope: sectionRef });
-
   return (
-    <section ref={sectionRef} className="py-20 lg:py-28" style={{ background: "#0d1520" }}>
+    <section className="py-20 lg:py-28" style={{ background: "#0d1520" }}>
       <div className="max-w-5xl mx-auto px-6 lg:px-8">
-        <div ref={headRef} className="text-center mb-12">
+        <div ref={headRef as React.RefObject<HTMLDivElement>} className="text-center mb-12"
+          style={{ opacity: headVisible ? 1 : 0, transform: headVisible ? "translateY(0)" : "translateY(24px)", transition: "opacity 0.6s ease, transform 0.6s ease" }}>
           <span className="text-brand-red text-xs font-bold tracking-[0.2em] uppercase block mb-3">Run The Numbers</span>
           <h2 className="text-white text-3xl lg:text-4xl font-black mb-3"
             style={{ fontFamily: "var(--font-display)", letterSpacing: "-0.02em" }}>
@@ -199,8 +201,8 @@ function ROICalculator() {
           </p>
         </div>
 
-        <div ref={cardRef} className="rounded-2xl overflow-hidden"
-          style={{ background: "#111e29", border: "1px solid rgba(255,255,255,0.07)" }}>
+        <div ref={cardRef as React.RefObject<HTMLDivElement>} className="rounded-2xl overflow-hidden"
+          style={{ background: "#111e29", border: "1px solid rgba(255,255,255,0.07)", opacity: cardVisible ? 1 : 0, transform: cardVisible ? "translateY(0)" : "translateY(28px)", transition: "opacity 0.65s ease 0.1s, transform 0.65s ease 0.1s" }}>
 
           <div className="p-8 lg:p-10 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
             {/* Inputs */}
@@ -324,15 +326,7 @@ function ROICalculator() {
 // ─── PRICING CARD ─────────────────────────────────────────────────────────────
 
 function PricingCard({ tier, index }: { tier: typeof tiers[0]; index: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useGSAP(() => {
-    gsap.from(ref.current, {
-      y: 50, opacity: 0, duration: 0.7, ease: "power3.out",
-      delay: index * 0.1,
-      scrollTrigger: { trigger: ref.current, start: "top 88%" },
-    });
-  });
+  const { ref, visible } = useReveal(0.1);
 
   return (
     <div ref={ref} className="relative flex flex-col rounded-2xl overflow-hidden"
@@ -342,7 +336,9 @@ function PricingCard({ tier, index }: { tier: typeof tiers[0]; index: number }) 
         boxShadow: tier.recommended
           ? "0 0 60px rgba(232,34,26,0.1), 0 24px 48px rgba(0,0,0,0.4)"
           : "0 8px 24px rgba(0,0,0,0.25)",
-        transform: tier.recommended ? "translateY(-10px)" : "none",
+        transform: visible ? (tier.recommended ? "translateY(-10px)" : "translateY(0)") : "translateY(28px)",
+        opacity: visible ? 1 : 0,
+        transition: `opacity 0.55s ease ${index * 0.1}s, transform 0.55s ease ${index * 0.1}s`,
       }}>
       {tier.recommended && (
         <div className="h-[3px] w-full" style={{ background: "var(--rainbow)" }} />
@@ -415,33 +411,22 @@ function PricingCard({ tier, index }: { tier: typeof tiers[0]; index: number }) 
 // ─── COMPARISON TABLE ─────────────────────────────────────────────────────────
 
 function ComparisonTable() {
-  const ref = useRef<HTMLElement>(null);
-  const headRef = useRef<HTMLDivElement>(null);
-  const tableRef = useRef<HTMLDivElement>(null);
-
-  useGSAP(() => {
-    gsap.from(headRef.current, {
-      y: 25, opacity: 0, duration: 0.6, ease: "power2.out",
-      scrollTrigger: { trigger: headRef.current, start: "top 85%" },
-    });
-    gsap.from(tableRef.current, {
-      y: 35, opacity: 0, duration: 0.7, ease: "power2.out", delay: 0.1,
-      scrollTrigger: { trigger: tableRef.current, start: "top 85%" },
-    });
-  }, { scope: ref });
+  const { ref: headRef, visible: headVisible } = useReveal(0.15);
+  const { ref: tableRef, visible: tableVisible } = useReveal(0.05);
 
   return (
-    <section ref={ref} className="py-20 lg:py-28" style={{ background: "#111e29" }}>
+    <section className="py-20 lg:py-28" style={{ background: "#111e29" }}>
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
-        <div ref={headRef} className="text-center mb-12">
+        <div ref={headRef as React.RefObject<HTMLDivElement>} className="text-center mb-12"
+          style={{ opacity: headVisible ? 1 : 0, transform: headVisible ? "translateY(0)" : "translateY(20px)", transition: "opacity 0.6s ease, transform 0.6s ease" }}>
           <h2 className="text-white text-3xl lg:text-4xl font-black"
             style={{ fontFamily: "var(--font-display)", letterSpacing: "-0.02em" }}>
             Compare Packages
           </h2>
         </div>
 
-        <div ref={tableRef} className="overflow-x-auto rounded-2xl"
-          style={{ border: "1px solid rgba(255,255,255,0.07)" }}>
+        <div ref={tableRef as React.RefObject<HTMLDivElement>} className="overflow-x-auto rounded-2xl"
+          style={{ border: "1px solid rgba(255,255,255,0.07)", opacity: tableVisible ? 1 : 0, transform: tableVisible ? "translateY(0)" : "translateY(28px)", transition: "opacity 0.65s ease 0.1s, transform 0.65s ease 0.1s" }}>
           <table className="w-full text-sm border-collapse">
             <thead>
               <tr>
