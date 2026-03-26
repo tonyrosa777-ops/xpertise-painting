@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 gsap.registerPlugin(useGSAP);
 
@@ -22,6 +23,7 @@ export default function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
@@ -38,7 +40,7 @@ export default function Navigation() {
       ease: "power3.out",
       delay: 0.1,
     });
-  });
+  }, { dependencies: [] });
 
   useEffect(() => {
     if (!mobileMenuRef.current) return;
@@ -62,6 +64,11 @@ export default function Navigation() {
   const scrollTo = (href: string) => {
     setMobileOpen(false);
     if (href.startsWith("/")) return; // let Link handle it
+    if (pathname !== "/") {
+      // On non-home pages, navigate to home with the hash
+      window.location.href = "/" + href;
+      return;
+    }
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };

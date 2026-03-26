@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Blog Post | Xpertise Painting LLC",
 };
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
+export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   return (
     <>
-      <Navigation />
       <main className="min-h-screen" style={{ background: "#F8F7F5", paddingTop: "83px" }}>
         {/* Back */}
         <div className="max-w-3xl mx-auto px-6 lg:px-8 pt-10">
@@ -31,7 +30,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
               className="text-navy text-3xl lg:text-4xl font-black mt-3 mb-6 leading-tight"
               style={{ fontFamily: "var(--font-display)" }}
             >
-              Article: {params.slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}
+              Article: {slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}
             </h1>
             <div className="flex items-center gap-4 text-navy/40 text-sm mb-8 pb-8 border-b border-light-dark">
               <span>By Alysha Pillsbury</span>

@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { products } from "@/lib/products";
 
@@ -12,7 +11,6 @@ export default function ShopPage() {
 
   return (
     <>
-      <Navigation />
       <main className="min-h-screen" style={{ background: "#F8F7F5", paddingTop: "83px" }}>
         {/* Header */}
         <section className="bg-navy py-20 lg:py-28">

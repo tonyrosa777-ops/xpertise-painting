@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
 gsap.registerPlugin(useGSAP);
@@ -488,7 +487,6 @@ export default function PricingPage() {
 
   return (
     <>
-      <Navigation />
       <main style={{ background: "#0d1520" }}>
 
         {/* ── HERO ── */}

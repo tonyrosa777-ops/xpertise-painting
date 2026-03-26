@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
 const testimonials = [
@@ -176,7 +175,6 @@ export default function TestimonialsPage() {
 
   return (
     <>
-      <Navigation />
       <main className="min-h-screen" style={{ background: "#F8F7F5", paddingTop: "83px" }}>
 
         {/* Header */}

@@ -1,4 +1,3 @@
-import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import TrustBar from "@/components/TrustBar";
 import Services from "@/components/Services";
@@ -16,7 +15,6 @@ import MobileStickyCTA from "@/components/MobileStickyCTA";
 export default function Home() {
   return (
     <>
-      <Navigation />
       <main className="pb-16 lg:pb-0">
         <Hero />
         <TrustBar />
