@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Playfair_Display, DM_Sans } from "next/font/google";
-import Script from "next/script";
 import SmoothScroll from "@/components/SmoothScroll";
 import Navigation from "@/components/Navigation";
+import SnipcartInit from "@/components/SnipcartInit";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -54,17 +54,7 @@ export default function RootLayout({
       <body suppressHydrationWarning>
         <Navigation />
         <SmoothScroll>{children}</SmoothScroll>
-        {/* Snipcart config — hidden div in body */}
-        <div
-          id="snipcart"
-          data-config-modal-style="side"
-          data-api-key={process.env.NEXT_PUBLIC_SNIPCART_API_KEY ?? "YOUR_SNIPCART_PUBLIC_KEY"}
-          hidden
-        />
-        <Script
-          src="https://cdn.snipcart.com/themes/v3.7.3/default/snipcart.js"
-          strategy="lazyOnload"
-        />
+        <SnipcartInit />
       </body>
     </html>
   );
