@@ -15,7 +15,6 @@ const navLinks = [
   { label: "For Contractors", href: "#contractors" },
   { label: "Blog", href: "/blog" },
   { label: "Shop", href: "/shop" },
-  { label: "Pricing", href: "/pricing" },
 ];
 
 export default function Navigation() {
