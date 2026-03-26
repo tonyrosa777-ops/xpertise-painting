@@ -51,7 +51,7 @@ export default function RootLayout({
           href="https://cdn.snipcart.com/themes/v3.7.3/default/snipcart.css"
         />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <Navigation />
         <SmoothScroll>{children}</SmoothScroll>
         {/* Snipcart config — hidden div in body */}
@@ -63,7 +63,7 @@ export default function RootLayout({
         />
         <Script
           src="https://cdn.snipcart.com/themes/v3.7.3/default/snipcart.js"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
       </body>
     </html>
