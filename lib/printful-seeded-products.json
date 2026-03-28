@@ -1,0 +1,22 @@
+{
+  "storeId": 0,
+  "note": "Placeholder — replace storeId and printful_id values once Alysha's Printful store is created. preview_image_url will be populated by Printful after products are synced.",
+  "products": [
+    { "slug": "unisex-heavy-blend-zip-hoodie", "name": "Unisex Zip Hoodie", "printful_id": 0, "price": 43.00, "category": "Apparel", "preview_image_url": null },
+    { "slug": "crop-hoodie", "name": "Crop Hoodie", "printful_id": 0, "price": 54.50, "category": "Apparel", "preview_image_url": null },
+    { "slug": "classic-tee", "name": "Classic Tee", "printful_id": 0, "price": 28.00, "category": "Apparel", "preview_image_url": null },
+    { "slug": "scented-soy-candle", "name": "Scented Soy Candle", "printful_id": 0, "price": 15.00, "category": "Home & Stationery", "preview_image_url": null },
+    { "slug": "insulated-tumbler-with-straw", "name": "Insulated Tumbler with Straw", "printful_id": 0, "price": 35.00, "category": "Drinkware", "preview_image_url": null },
+    { "slug": "hardcover-bound-notebook", "name": "Hardcover Notebook", "printful_id": 0, "price": 24.50, "category": "Home & Stationery", "preview_image_url": null },
+    { "slug": "can-cooler", "name": "Can Cooler", "printful_id": 0, "price": 10.50, "category": "Drinkware", "preview_image_url": null },
+    { "slug": "black-glossy-mug", "name": "Black Glossy Mug", "printful_id": 0, "price": 19.00, "category": "Drinkware", "preview_image_url": null },
+    { "slug": "white-glossy-mug", "name": "White Glossy Mug", "printful_id": 0, "price": 16.50, "category": "Drinkware", "preview_image_url": null },
+    { "slug": "spiral-bound-journal", "name": "Spiral Bound Journal", "printful_id": 0, "price": 22.50, "category": "Home & Stationery", "preview_image_url": null },
+    { "slug": "strap-apron", "name": "Strap Apron", "printful_id": 0, "price": 37.00, "category": "Home & Stationery", "preview_image_url": null },
+    { "slug": "stainless-steel-water-bottle", "name": "Stainless Steel Water Bottle", "printful_id": 0, "price": 40.50, "category": "Drinkware", "preview_image_url": null },
+    { "slug": "pennant-banner", "name": "Pennant Banner", "printful_id": 0, "price": 19.00, "category": "Home & Stationery", "preview_image_url": null },
+    { "slug": "tote-bag", "name": "Tote Bag", "printful_id": 0, "price": 28.50, "category": "Bags", "preview_image_url": null },
+    { "slug": "backpack", "name": "Backpack", "printful_id": 0, "price": 62.00, "category": "Bags", "preview_image_url": null },
+    { "slug": "teddy-bear-with-t-shirt", "name": "Teddy Bear with T-Shirt", "printful_id": 0, "price": 0, "category": "Accessories", "preview_image_url": null }
+  ]
+}

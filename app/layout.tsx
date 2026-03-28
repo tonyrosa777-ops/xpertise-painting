@@ -3,6 +3,8 @@ import { Playfair_Display, DM_Sans } from "next/font/google";
 import SmoothScroll from "@/components/SmoothScroll";
 import Navigation from "@/components/Navigation";
 import SnipcartInit from "@/components/SnipcartInit";
+import CartDrawer from "@/components/CartDrawer";
+import { CartProvider } from "@/lib/cart";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -52,9 +54,12 @@ export default function RootLayout({
         />
       </head>
       <body suppressHydrationWarning>
-        <Navigation />
-        <SmoothScroll>{children}</SmoothScroll>
-        <SnipcartInit />
+        <CartProvider>
+          <Navigation />
+          <SmoothScroll>{children}</SmoothScroll>
+          <SnipcartInit />
+          <CartDrawer />
+        </CartProvider>
       </body>
     </html>
   );

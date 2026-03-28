@@ -5,6 +5,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useCart } from "@/lib/cart";
 
 gsap.registerPlugin(useGSAP);
 
@@ -24,6 +25,7 @@ export default function Navigation() {
   const navRef = useRef<HTMLElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const { count, openCart } = useCart();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
@@ -139,10 +141,10 @@ export default function Navigation() {
             >
               (603) 534-0115
             </a>
-            {/* Snipcart cart opener */}
+            {/* Snipcart cart opener (services/gift cards) */}
             <button
               className="snipcart-checkout relative text-white/70 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10"
-              aria-label="Open cart"
+              aria-label="Open services cart"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
@@ -150,6 +152,22 @@ export default function Navigation() {
                 <path d="M16 10a4 4 0 0 1-8 0" />
               </svg>
               <span className="snipcart-items-count absolute -top-0.5 -right-0.5 bg-brand-red text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center leading-none" />
+            </button>
+            {/* Merch cart opener (Printful items) */}
+            <button
+              onClick={openCart}
+              className="relative text-white/70 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10"
+              aria-label="Open merch cart"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+              </svg>
+              {count > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 bg-brand-red text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center leading-none">
+                  {count}
+                </span>
+              )}
             </button>
             <button
               onClick={() => scrollTo("#contact")}
@@ -160,18 +178,35 @@ export default function Navigation() {
             </button>
           </div>
 
-          {/* Mobile cart */}
-          <button
-            className="snipcart-checkout lg:hidden relative text-white/70 hover:text-white transition-colors p-2"
-            aria-label="Open cart"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-              <line x1="3" y1="6" x2="21" y2="6" />
-              <path d="M16 10a4 4 0 0 1-8 0" />
-            </svg>
-            <span className="snipcart-items-count absolute -top-0.5 -right-0.5 bg-brand-red text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center leading-none" />
-          </button>
+          {/* Mobile carts */}
+          <div className="lg:hidden flex items-center gap-1">
+            <button
+              className="snipcart-checkout relative text-white/70 hover:text-white transition-colors p-2"
+              aria-label="Open services cart"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <path d="M16 10a4 4 0 0 1-8 0" />
+              </svg>
+              <span className="snipcart-items-count absolute -top-0.5 -right-0.5 bg-brand-red text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center leading-none" />
+            </button>
+            <button
+              onClick={openCart}
+              className="relative text-white/70 hover:text-white transition-colors p-2"
+              aria-label="Open merch cart"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+              </svg>
+              {count > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 bg-brand-red text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center leading-none">
+                  {count}
+                </span>
+              )}
+            </button>
+          </div>
 
           {/* Mobile hamburger */}
           <button

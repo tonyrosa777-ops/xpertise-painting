@@ -1,8 +1,36 @@
 "use client";
 
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Footer from "@/components/Footer";
 import { products } from "@/lib/products";
+import MerchSection from "@/components/MerchSection";
+import { useCart } from "@/lib/cart";
+
+function MerchSuccessBanner() {
+  const searchParams = useSearchParams();
+  const success = searchParams.get("merch_success") === "true";
+  const { clearCart } = useCart();
+
+  if (!success) return null;
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0, y: -40 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -40 }}
+        onAnimationComplete={() => clearCart()}
+        className="fixed top-0 left-0 right-0 z-50 bg-navy text-white text-center py-3 px-6 border-b-2 border-brand-red"
+        style={{ fontWeight: 600 }}
+      >
+        Your order is confirmed! Merch is on its way — fulfilled by Printful.
+      </motion.div>
+    </AnimatePresence>
+  );
+}
 
 export default function ShopPage() {
   const scrollToContact = () => {
@@ -11,6 +39,9 @@ export default function ShopPage() {
 
   return (
     <>
+      <Suspense fallback={null}>
+        <MerchSuccessBanner />
+      </Suspense>
       <main className="min-h-screen" style={{ background: "#F8F7F5", paddingTop: "83px" }}>
         {/* Header */}
         <section className="bg-navy py-20 lg:py-28">
@@ -173,6 +204,12 @@ export default function ShopPage() {
             ))}
           </div>
 
+        </div>
+
+        {/* Merch section — Printful print-on-demand */}
+        <MerchSection />
+
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-0">
           {/* Custom project section */}
           <div className="mt-16 bg-navy rounded-2xl p-8 lg:p-12 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div>
